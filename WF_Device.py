@@ -12,7 +12,7 @@ class WF_Device:
             if sys.platform.startswith("win"):
                 self._dwf = cdll.LoadLibrary("dwf.dll")
             elif sys.platform.startswith("darwin"):
-                self._dwf = cdll.LoadLibrary("/Library/Frameworks/dwf.framework/dwf"):
+                self._dwf = cdll.LoadLibrary("/Library/Frameworks/dwf.framework/dwf")
             else:
                 self._dwf = cdll.LoadLibrary("libdwf.so")
         except OSError:
