@@ -28,7 +28,7 @@ class WF_Device:
         logging.debug("Aquiring device...")
         self._dwf.FDwfDeviceOpen(c_int(device_index), byref(self._hdwf))
         if self._hdwf.value == 0:
-            logging.error("Faild to open device")
+            logging.error("Failed to open device")
             szerr = create_string_buffer(512)
             self._dwf.FDwfGetLastErrorMsg(szerr)
             logging.error(str(szerr.value))
