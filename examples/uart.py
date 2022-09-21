@@ -1,5 +1,7 @@
-from ..WF_Device import WF_Device
-from ..WF_Uart import WF_Uart
+import sys
+sys.path.append('..')
+from WF_Device import WF_Device
+from WF_Uart import WF_Uart
 
 if __name__ == "__main__":
     logan = WF_Device()

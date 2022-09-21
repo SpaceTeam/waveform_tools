@@ -1,6 +1,8 @@
-from ..WF_Device import WF_Device
-from ..WF_DIO import WF_DIO
+import sys
+sys.path.append('..')
 import time
+from WF_Device import WF_Device
+from WF_DIO import WF_DIO
 
 if __name__ == "__main__":
     logan = WF_Device()
