@@ -40,7 +40,7 @@ class CEP(Enum):
         val.extend(len(self.data).to_bytes(2, 'big'))
         val.extend(self.data)
         val.extend(CRC.calculate_checksum(self.data).to_bytes(4, 'big'))
-        return val    
+        return val
 
 
 if __name__ == '__main__':

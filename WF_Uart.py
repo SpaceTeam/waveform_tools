@@ -1,5 +1,6 @@
 from ctypes import *
 import time
+from CEP import CEP
 from WF_Device import WF_Device
 import logging
 
@@ -28,6 +29,8 @@ class WF_Uart:
 
     def send(self, data: bytearray):
         logging.debug(f"Sending {data}...")
+        if isinstance(data, CEP):
+            data = data.serialize()
         rgTX = create_string_buffer(data)
         self._dwf.FDwfDigitalUartTx(self._hdwf, rgTX, c_int(sizeof(rgTX)-1)) # send data, cut off \0
 
@@ -53,6 +56,14 @@ class WF_Uart:
 
         return buffer
 
+    def wait_for(self, expected: bytearray, timeout: float) -> None:
+        """Attempts to receive the expected data. Raises a Value/TimeoutError if not successful"""
+        logging.debug(f"Uart waiting for {expected}...")
+        if isinstance(data, CEP):
+            data = data.serialize()
+        ret = self.receive(len(expected), timeout)
+        if ret != expected:
+            raise ValueError(f"Expected {expected} but received {ret}")
 
 class ParityError(Exception):
     pass  
