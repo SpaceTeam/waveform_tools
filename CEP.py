@@ -5,6 +5,7 @@ from crc import CrcCalculator, Configuration
 crc_config = Configuration(32, 0x04C11DB7, 0xffffffff)
 CRC = CrcCalculator(crc_config)
 
+
 class CEP(Enum):
     ACK = 0xD7
     NACK = 0x27
@@ -24,7 +25,7 @@ class CEP(Enum):
             return CEP(raw[0])
         if raw[0] != 0x8B:
             raise ValueError(f"Invalid package: {raw}")
-        
+
         data = raw[3:-4]
         check = raw[-4:]
         if not CRC.verify_checksum(data, int.from_bytes(check, 'big')):
