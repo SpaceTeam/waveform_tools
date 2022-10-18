@@ -3,7 +3,7 @@ import logging
 import time
 from typing import Literal
 
-from WF_Device import WF_Device
+from .WF_Device import WF_Device
 
 
 class WF_DIO:

@@ -1,7 +1,7 @@
 from ctypes import *
 import time
-from CEP import CEP
-from WF_Device import WF_Device
+from .CEP import CEP
+from .WF_Device import WF_Device
 import logging
 
 

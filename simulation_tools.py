@@ -1,9 +1,9 @@
 import logging
 
-from CEP import CEP
-from WF_Device import WF_Device
-from WF_Uart import WF_Uart
-from WF_DIO import WF_DIO
+from .CEP import CEP
+from .WF_Device import WF_Device
+from .WF_Uart import WF_Uart
+from .WF_DIO import WF_DIO
 
 
 class COBC:
