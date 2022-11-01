@@ -1,4 +1,6 @@
+from __future__ import annotations
 from enum import Enum
+from typing import List
 
 from crc import CrcCalculator, Configuration
 
@@ -20,7 +22,8 @@ class CEP(Enum):
         return obj
 
     @staticmethod
-    def parse_packet(raw: bytearray):
+    def parse_packet(raw: bytearray) -> CEP:
+        """Attempts to parse the first packet present in the given bytearray"""
         if len(raw) == 0:
             raise ValueError("Empty bytearray")
 
@@ -41,7 +44,8 @@ class CEP(Enum):
         return CEP.with_data(data)
 
     @staticmethod
-    def parse_multiple_packets(raw: bytearray):
+    def parse_multiple_packets(raw: bytearray) -> List[CEP]:
+        """Attempts to parse all packets in the given bytearray"""
         packs = list()
         while len(raw) > 0:
             p = CEP.parse_packet(raw)
