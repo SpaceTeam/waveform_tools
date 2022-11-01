@@ -20,17 +20,34 @@ class CEP(Enum):
         return obj
 
     @staticmethod
-    def from_bytes(raw: bytearray):
-        if len(raw) == 1:
-            return CEP(raw[0])
-        if raw[0] != 0x8B:
-            raise ValueError(f"Invalid package: {raw}")
+    def parse_packet(raw: bytearray):
+        if len(raw) == 0:
+            raise ValueError("Empty bytearray")
 
-        data = raw[3:-4]
-        check = raw[-4:]
-        if not CRC.verify_checksum(data, int.from_bytes(check, 'big')):
-            raise ValueError(f"Invalid CRC: {raw}")
+        if raw[0] not in [e.value for e in CEP]:
+            raise ValueError(f"Unknown first byte {hex(raw[0])}")
+
+        if raw[0] != 0x8B:
+            return CEP(raw[0])
+        
+        length = int.from_bytes(raw[1:3], byteorder='little')
+        if len(raw) < length + 7:
+            raise ValueError(f"Length field ({length}) longer than bytearray")
+        
+        data = raw[3:3+length]
+        check = raw[3+length:3+length+4]
+        if not CRC.verify_checksum(data, int.from_bytes(check, 'little')):
+            raise ValueError(f"Invalid CRC: {check}")
         return CEP.with_data(data)
+
+    @staticmethod
+    def parse_multiple_packets(raw: bytearray):
+        packs = list()
+        while len(raw) > 0:
+            p = CEP.parse_packet(raw)
+            raw = raw[len(p):]
+            packs.append(p)
+        return packs
 
     def serialize(self) -> bytearray:
         if self.name != "DATA":
@@ -43,6 +60,19 @@ class CEP(Enum):
         val.extend(CRC.calculate_checksum(self.data).to_bytes(4, 'big'))
         return val
 
+    def __len__(self) -> int:
+        if self.value != 0x8B:
+            return 1
+        else:
+            return 7 + len(self.data)
+
+    def __str__(self) -> str:
+        if self.value != 0x8B:
+            return f"<{self.name} {hex(self.value)}>"
+        else:
+            return f"<{self.name} with {len(self.data)} bytes>"
+
 
 if __name__ == '__main__':
-    print(CEP.from_bytes(CEP.with_data(b"hello").serialize()))
+    arr = b'\x8b\x03\x00\x12\x34\x56\x57\x86\x98\xbe\xd7'
+    print(CEP.parse_multiple_packets(arr))
