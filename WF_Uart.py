@@ -10,7 +10,7 @@ class WF_Uart:
         """Initializes a UART protocol on the given tx and rx pins. 
         The parity bit can be set to 0 - No parity bit, 1 - odd, 2 - even
         """
-        if device.value == 0:
+        if device._hdwf.value == 0:
             raise ValueError("waveform device is not connected")
         
         logging.debug("Configuring UART")

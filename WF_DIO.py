@@ -8,7 +8,7 @@ from .WF_Device import WF_Device
 
 class WF_DIO:
     def __init__(self, device: WF_Device, pin: int, output_enable=False):
-        if device.value == 0:
+        if device._hdwf.value == 0:
             raise ValueError("waveform device is not connected")
         self._d = device
         self._pin = pin
