@@ -31,8 +31,9 @@ class WF_Uart:
         logging.debug(f"Sending {data}...")
         if isinstance(data, CEP):
             data = data.serialize()
-        rgTX = create_string_buffer(data)
-        self._dwf.FDwfDigitalUartTx(self._hdwf, rgTX, c_int(sizeof(rgTX)-1)) # send data, cut off \0
+        rgTX = create_string_buffer(len(data))
+        rgTX.value = bytes(data)
+        self._d._dwf.FDwfDigitalUartTx(self._d._hdwf, rgTX, c_int(sizeof(rgTX)-1)) # send data, cut off \0
 
     def receive(self, n_bytes: int, timeout: float) -> bytearray:
         """Attempts to receive the given number of bytes within a timeout given in seconds.
@@ -44,7 +45,7 @@ class WF_Uart:
         end_time = time.perf_counter() + timeout
 
         while time.perf_counter() < end_time:
-            self._dwf.FDwfDigitalUartRx(self._hdwf, rgRX, c_int(sizeof(rgRX)), byref(self._rx_count), byref(self._rx_parity))
+            self._d._dwf.FDwfDigitalUartRx(self._d._hdwf, rgRX, c_int(sizeof(rgRX)), byref(self._rx_count), byref(self._rx_parity))
             if self._rx_count.value > 0:
                 buffer.extend(rgRX.raw[:self._rx_count.value])
             if self._rx_parity.value != 0:

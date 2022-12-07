@@ -9,7 +9,7 @@ from .WF_DIO import WF_DIO
 class COBC:
     def __init__(self, device: WF_Device, tx_pin: int, rx_pin: int, update_pin: int, edu_enable_pin: int, heartbeat_pin: int):
         self.device = device
-        self.uart = WF_Uart(self.device, 115200, tx_pin, rx_pin, 8, 2, 1)
+        self.uart = WF_Uart(self.device, 921600, tx_pin, rx_pin, 8, 0, 1)
         self.update_pin = WF_DIO(self.device, update_pin, False)
         self.edu_enable_pin = WF_DIO(self.device, edu_enable_pin, True)
         self.heartbeat_pin = WF_DIO(self.device, heartbeat_pin, False)
