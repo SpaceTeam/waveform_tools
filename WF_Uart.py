@@ -64,8 +64,11 @@ class WF_Uart:
     def wait_for(self, expected: bytearray, timeout: float) -> None:
         """Attempts to receive the expected data. Raises a Value/TimeoutError if not successful"""
         logging.debug(f"Uart waiting for {expected}...")
-        if isinstance(data, CEP):
-            data = data.serialize()
+        if isinstance(expected, CEP):
+            expected = expected.serialize()
+        elif isinstance(expected, list):
+            serialized = [p.serialize() for p in expected]
+            expected = bytearray([item for p in serialized for item in p])
         ret = self.receive(len(expected), timeout)
         if ret != expected:
             raise ValueError(f"Expected {expected} but received {ret}")

@@ -55,7 +55,7 @@ class CEP(Enum):
 
     def serialize(self) -> bytearray:
         if self.name != "DATA":
-            return bytearray(self.value)
+            return bytearray([self.value])
 
         val = bytearray(0)
         val.append(self.value)
